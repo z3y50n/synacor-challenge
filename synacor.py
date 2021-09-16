@@ -13,7 +13,7 @@ def read_code(filename):
 
 
 def display():
-    print("PC: {:>5}".format(PC))
+    print(f"PC: {PC:5}")
     print(registers)
 
 
