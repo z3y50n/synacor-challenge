@@ -3,6 +3,7 @@ from architecture import Memory, Registers, Stack
 memory = Memory()
 registers = Registers()
 stack = Stack()
+PC = 0
 
 
 def read_code(filename):
@@ -11,7 +12,13 @@ def read_code(filename):
     return code
 
 
+def display():
+    print("PC: {:>5}".format(PC))
+    print(registers)
+
+
 if __name__ == "__main__":
+    display()
     code = read_code("challenge.bin")
     memory.load_code(code)
 

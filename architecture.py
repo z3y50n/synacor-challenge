@@ -6,7 +6,7 @@ class Registers:
         self.registers = [struct.pack("<H", 0)] * 8
 
     def __getitem__(self, k):
-        if k < 32768 or k > 32775:
+        if k < 0 or (k > 7 and k < 32768) or k > 32775:
             raise Exception("Wrong register address")
         return struct.unpack("<H", self.registers[k % 32768])[0]
 
@@ -14,6 +14,15 @@ class Registers:
         if k < 32768 or k > 32775:
             raise Exception("Wrong register address")
         self.registers[k % 32768] = struct.pack("<H", v)
+
+    def __repr__(self):
+        text = "R0: {:>5}, R1: {:>5}, R2: {:>5}, R3: {:>5}\n".format(
+            self[0], self[1], self[2], self[3]
+        )
+        text += "R4: {:>5}, R5: {:>5}, R6: {:>5}, R7: {:>5}\n".format(
+            self[4], self[5], self[6], self[7]
+        )
+        return text
 
 
 class Memory:
