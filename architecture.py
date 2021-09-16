@@ -5,15 +5,15 @@ class Registers:
     def __init__(self):
         self.registers = [struct.pack("<H", 0)] * 8
 
-    def get_register(self, addr):
-        if addr < 32768 or addr > 32775:
+    def __getitem__(self, k):
+        if k < 32768 or k > 32775:
             raise Exception("Wrong register address")
-        return struct.unpack("<H", self.registers[addr % 32768])[0]
+        return struct.unpack("<H", self.registers[k % 32768])[0]
 
-    def set_register(self, addr, v):
-        if addr < 32768 or addr > 32775:
+    def __setitem__(self, k, v):
+        if k < 32768 or k > 32775:
             raise Exception("Wrong register address")
-        self.registers[addr % 32768] = struct.pack("<H", v)
+        self.registers[k % 32768] = struct.pack("<H", v)
 
 
 class Memory:
