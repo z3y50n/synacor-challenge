@@ -1,6 +1,7 @@
 import struct
 
-class Registers():
+
+class Registers:
     def __init__(self):
         self.registers = [struct.pack("<H", 0)] * 8
 
@@ -14,9 +15,10 @@ class Registers():
             raise Exception("Wrong register address")
         self.registers[addr % 32768] = struct.pack("<H", v)
 
-class Memory():
+
+class Memory:
     def __init__(self):
-        self.memory = struct.pack("<"+"H"*2**15, *[0 for _ in range(2**15)])
+        self.memory = struct.pack("<" + "H" * 2 ** 15, *[0 for _ in range(2 ** 15)])
 
     def __len__(self):
         return len(self.memory)
@@ -24,18 +26,21 @@ class Memory():
     def __getitem__(self, k):
         if isinstance(k, slice):
             size = k.stop - k.start
-            return struct.unpack("<" + "H"*size, self.memory[2*k.start: 2*k.stop])
-        return struct.unpack("<H", self.memory[2*k:2*k+2])[0]
+            return struct.unpack(
+                "<" + "H" * size, self.memory[2 * k.start : 2 * k.stop]
+            )
+        return struct.unpack("<H", self.memory[2 * k : 2 * k + 2])[0]
 
     def load_code(self, code):
         if len(code) > len(self.memory):
             raise Exception("Code doesn't fit in memory")
-        self.memory = code + self.memory[len(code):]
+        self.memory = code + self.memory[len(code) :]
 
     def get_memory(self):
         return self.memory
 
-class Stack():
+
+class Stack:
     def __init__(self):
         self.data = []
 
