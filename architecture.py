@@ -37,6 +37,12 @@ class Memory:
             )
         return struct.unpack("<H", self.memory[2 * k : 2 * k + 2])[0]
 
+    def __setitem__(self, addr, v):
+        if addr >= len(self.memory) // 2:
+            raise Exception("Addresses out of bounds")
+
+        self.memory = self.memory[:2*addr] + struct.pack("<H", v) + self.memory[2*addr+2:]
+
     def load_code(self, code):
         if len(code) > len(self.memory):
             raise Exception("Code doesn't fit in memory")
