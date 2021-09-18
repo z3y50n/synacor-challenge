@@ -27,7 +27,7 @@ class Memory:
         self.memory = struct.pack("<" + "H" * 2 ** 15, *[0 for _ in range(2 ** 15)])
 
     def __len__(self):
-        return len(self.memory)
+        return len(self.memory) // 2
 
     def __getitem__(self, k):
         if isinstance(k, slice):
@@ -38,10 +38,12 @@ class Memory:
         return struct.unpack("<H", self.memory[2 * k : 2 * k + 2])[0]
 
     def __setitem__(self, addr, v):
-        if addr >= len(self.memory) // 2:
+        if addr >= len(self):
             raise Exception("Addresses out of bounds")
 
-        self.memory = self.memory[:2*addr] + struct.pack("<H", v) + self.memory[2*addr+2:]
+        self.memory = (
+            self.memory[: 2 * addr] + struct.pack("<H", v) + self.memory[2 * addr + 2 :]
+        )
 
     def load_code(self, code):
         if len(code) > len(self.memory):
