@@ -42,7 +42,7 @@ def display(cmd):
     print(registers)
 
 
-def step():
+def execute():
     global PC
     opcode = memory[PC]
     a = memory[PC + 1]
@@ -61,7 +61,14 @@ def step():
         display(cmd)
         if a:
             PC = b
-        PC += 1
+        else:
+            PC += 1
+    elif opcode == 8:
+        display(cmd)
+        if not a:
+            PC = b
+        else:
+            PC += 1
     elif opcode == 19:
         print(chr(a), end="")
         PC += 2
@@ -75,6 +82,7 @@ def step():
 if __name__ == "__main__":
     code = read_code("challenge.bin")
     memory.load_code(code)
+    PC = 487
 
     while PC < len(memory):
-        step()
+        execute()
