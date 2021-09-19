@@ -17,6 +17,11 @@ def display(cmd):
     print(registers)
 
 
+def reg_or_value(x):
+    if x >= 32768 and x <= 32775:
+        x = registers[x]
+    return x
+
 def execute():
     global PC
     opcode = OpCodes(memory[PC])
@@ -29,28 +34,41 @@ def execute():
         display(cmd)
         print("Halt. Exiting...")
         exit(0)
+    if opcode == OpCodes.SET:
+        display(f"{cmd} {a} {b}")
+        registers[a] = b
+        PC += 3
     elif opcode == OpCodes.JMP:
-        display(cmd)
+        display(f"{cmd} {a}")
         PC = a
     elif opcode == OpCodes.JT:
-        display(cmd)
+        display(f"{cmd} {a} {b}")
+        a = reg_or_value(a)
         if a:
             PC = b
         else:
-            PC += 1
+            PC += 3
     elif opcode == OpCodes.JF:
-        display(cmd)
+        display(f"{cmd} {a} {b}")
+        a = reg_or_value(a)
         if not a:
             PC = b
         else:
-            PC += 1
+            PC += 3
+    elif opcode == OpCodes.ADD:
+        display(f"{cmd} {a} {b} {c}")
+        b = reg_or_value(b)
+        c = reg_or_value(c)
+        registers[a] = (b + c) % 32768
+        PC += 4
     elif opcode == OpCodes.OUT:
+        a = reg_or_value(a)
         print(chr(a), end="")
         PC += 2
     elif opcode == OpCodes.NOOP:
         PC += 1
     else:
-        print(f"Didn't implement logic for command {cmd} with opcode {opcode}")
+        print(f"Didn't implement logic for command {cmd} with opcode {opcode.value}")
         exit(0)
 
 
