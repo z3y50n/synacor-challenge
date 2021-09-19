@@ -39,6 +39,8 @@ class Registers:
     def __setitem__(self, k, v):
         if k < 0 or (k > 7 and k < 32768) or k > 32775:
             raise Exception("Wrong register address")
+        if v >= 2 ** 15:
+            raise Exception("Register Overload")
         self.registers[k % 32768] = struct.pack("<H", v)
 
     def __repr__(self):
