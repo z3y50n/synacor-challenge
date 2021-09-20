@@ -5,5 +5,6 @@ Goal is to find all codes while building the given architecture.
 Codes so far:
 * bTHAEEZpRSuq
 * BGGODvjUwItF
+* EgCtJzCyATvJ
 
 
