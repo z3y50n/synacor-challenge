@@ -4,7 +4,7 @@ memory = Memory()
 registers = Registers()
 stack = Stack()
 PC = 0
-text = []
+terminal_input = []
 
 
 def read_code(filename):
@@ -30,6 +30,7 @@ def bit_not(n, numbits=15):
 
 def execute():
     global PC
+    global terminal_input
     opcode = OpCodes(memory[PC])
     cmd = opcode.name
     a = memory[PC + 1]
@@ -147,12 +148,12 @@ def execute():
         print(chr(a), end="")
         PC += 2
     elif opcode == OpCodes.IN:
-        txt = input()
-        if not txt:
-            registers[a] = 10
-        else:
-            registers[a] = sum(ord(c) for c in txt) % 32768
+        #display(f"{cmd} {a}")
+        if not terminal_input:
+            terminal_input = list(input() + "\n")
+        registers[a] = ord(terminal_input.pop(0))
         PC += 2
+
     elif opcode == OpCodes.NOOP:
         PC += 1
     else:
